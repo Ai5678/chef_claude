@@ -4,7 +4,7 @@ import IngredientsList from "./IngredientsList";
 
 export default function Main(){
     const [ingredients, setIngredients] = useState([]);
-    const [recipeShown, setRecipeShown] = useState(false);
+    const [recipe, setRecipe] = useState("");
 
 
     function addIngredient(formData){
@@ -12,9 +12,23 @@ export default function Main(){
         setIngredients(prevIngredients => [...prevIngredients, newIngredient]);
     }
 
-    function toggleRecipeShown(){
-        setRecipeShown(prev => !prev);
+    async function toggleRecipeShown(){
+        try{
+            const response = await fetch("/api/recipe", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(ingredients)
+            });
+            const data = await response.json();
+            setRecipe(data.recipe);
+        }
+        catch(error){
+            console.error(error);
+        }
     }
+
 
     return(
         <main>
@@ -28,7 +42,7 @@ export default function Main(){
                 <button>Add Ingredient</button>
             </form>
             {ingredients.length > 0 && <IngredientsList ingredientsArray = {ingredients} showRecipe={toggleRecipeShown}/>}
-            {recipeShown && <ClaudeRecipe />}
+            {recipe && <ClaudeRecipe recipe={recipe} />}
         </main>
     )
 }
