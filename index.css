@@ -103,6 +103,7 @@ ul.ingredients-list li {
     cursor: pointer;
 }
 .suggested-recipe-container {
+    margin-top: 48px;
     color: #475467;
     line-height: 28px;
     font-size: 1.125rem;
